@@ -29,8 +29,6 @@ def remove_img_bg(img_base64):
     }
     headers = {
         "content-type": "application/x-www-form-urlencoded",
-        # "X-RapidAPI-Key": "6b7818d33dmshe820b2fe9246994p1b6d63jsn0cf2223101f8",
-        # "X-RapidAPI-Host": "background-removal.p.rapidapi.com"
         "X-RapidAPI-Key": X_RAPID_API_KEY,
         "X-RapidAPI-Host": X_RAPID_API_HOST
     }
