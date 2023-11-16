@@ -35,6 +35,8 @@ def remove_img_bg(img_base64):
 
     response = requests.post(url, data=payload, headers=headers)
 
+    print(response.json())
+
     image_output_base64 = response.json()["response"]["image_base64"]
 
     def base64_to_image(base64_string):

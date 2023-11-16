@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, render_template, request
 import base64
 from .api_connections import remove_img_bg
+from flask_bootstrap import Bootstrap
 
 # Logging: When required
 # try:
@@ -16,18 +17,29 @@ from .api_connections import remove_img_bg
 def create_app():
 
     app = Flask(__name__)
-    
-    # Healthy Connection 
-    @app.route('/')
-    def health():
-        return {"status": "Healthy"}
+    bootstrap = Bootstrap(app)
 
+    # # Healthy Connection 
+    # @app.route('/')
+    # def health():
+    #     return render_template('index.html')
+    #     # return {"status": "Healthy"}
+
+    @app.route('/', methods=['GET', 'POST'])
+    def index():
+        if request.method == 'POST':
+            name = request.form['name']
+            image = request.files['image'].read()
+            img_base64 = base64.b64encode(image)
+            remove_img_bg(img_base64)
+
+        return render_template('index.html')
 
     # Testing api_connections integration
     @app.route("/test-bg-remover")
     def test_bg_remover():
         try:
-            with open("test/raven.jpg", "rb") as img_file: 
+            with open("test/jarvis.jpg", "rb") as img_file: 
                 img_data = img_file.read()
                 img_base64 = base64.b64encode(img_data)
             
