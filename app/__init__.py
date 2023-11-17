@@ -31,10 +31,12 @@ def create_app():
     def health():
         return {"status": "Healthy"}
 
+    # Read
     @app.get('/')
     def index_page():
         return render_template('index.html')
 
+    # Create
     @app.post('/')
     def index_form():
         try:
@@ -57,6 +59,16 @@ def create_app():
             print(f"Error: {e}")
             flash("Something went wrong", MESSAGE_TYPE_DANGER)
             return redirect(url_for('index_page'))
+
+    # Update
+    @app.put('/update')
+    def update_data():
+        pass
+
+    # Delete
+    @app.delete('/remove')
+    def remove_data():
+        pass
 
     # Testing api_connections integration
     # @app.route("/test-bg-remover")
