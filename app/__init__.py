@@ -1,8 +1,9 @@
 # In-bulit lib imports
 import base64
+from bson import ObjectId
 
 # Flask imports
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, make_response
 
 # Application imports
 from .api_connections import remove_img_bg
@@ -34,6 +35,16 @@ def create_app():
     # Read
     @app.get('/')
     def index_page():
+        # Set cookies if None
+        if request.cookies.get('id') is None:
+            resp = make_response(render_template('index.html'))
+            obj_id = str(ObjectId())
+            print(obj_id)
+            resp.set_cookie('id', obj_id)
+            return resp
+        # Use cookies to fetch user data
+        id = request.cookies.get('id')
+        print(id)
         return render_template('index.html')
 
     # Create
@@ -43,6 +54,11 @@ def create_app():
             # Fetching form contents
             name = request.form['name']
             image = request.files['image'].read()
+
+            # Reading cookies; user id
+            id = request.cookies.get('id')
+            # Store ObjectId as NoSQL id in db
+            # ObjectId(id)
 
             # Converting image to base64
             img_base64 = base64.b64encode(image)
