@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-background-processor
+spec:
+  type: LoadBalancer
+  selector:
+    app: image-background-processor
+  ports:
+    - port: 80
+      targetPort: 8082

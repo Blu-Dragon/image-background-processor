@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-background-processor
+  labels:
+    name: image-background-processor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: image-background-processor
+  template:
+    metadata:
+      name: image-background-processor
+      labels:
+        name: image-background-processor
+    spec:
+      containers:
+        - name: image-background-processor
+          image: gcr.io/arctic-operand-405810-image-background-processor:v1.0
+          ports:
+            - containerPort: 8082
