@@ -31,6 +31,26 @@ metadata:
               'f:containers':
                 'k:{"name":"image-background-processor-sha256-1"}':
                   .: {}
+                  'f:env':
+                    .: {}
+                    'k:{"name":"APP_SECRET_KEY"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:configMapKeyRef': {}
+                    'k:{"name":"X_RAPID_API_HOST"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:configMapKeyRef': {}
+                    'k:{"name":"X_RAPID_API_KEY"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:configMapKeyRef': {}
                   'f:image': {}
                   'f:imagePullPolicy': {}
                   'f:name': {}
@@ -44,7 +64,7 @@ metadata:
               'f:terminationGracePeriodSeconds': {}
       manager: GoogleCloudConsole
       operation: Update
-      time: '2023-11-24T18:58:20Z'
+      time: '2023-11-24T19:42:21Z'
     - apiVersion: apps/v1
       fieldsType: FieldsV1
       fieldsV1:
@@ -79,7 +99,7 @@ metadata:
       manager: kube-controller-manager
       operation: Update
       subresource: status
-      time: '2023-11-24T18:58:49Z'
+      time: '2023-11-24T19:49:07Z'
   name: image-background-processor
   namespace: default
 spec:
@@ -98,7 +118,23 @@ spec:
         app: image-background-processor
     spec:
       containers:
-        - image: >-
+        - env:
+            - name: APP_SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_SECRET_KEY
+                  name: image-background-processor-config-6zph
+            - name: X_RAPID_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: X_RAPID_API_KEY
+                  name: image-background-processor-config-6zph
+            - name: X_RAPID_API_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: X_RAPID_API_HOST
+                  name: image-background-processor-config-6zph
+          image: >-
             gcr.io/arctic-operand-405810/github.com/blu-dragon/image-background-processor
           imagePullPolicy: IfNotPresent
           name: image-background-processor-sha256-1
@@ -126,7 +162,7 @@ metadata:
             'f:name': {}
       manager: GoogleCloudConsole
       operation: Update
-      time: '2023-11-24T18:58:20Z'
+      time: '2023-11-24T19:42:21Z'
     - apiVersion: autoscaling/v2
       fieldsType: FieldsV1
       fieldsV1:
@@ -160,8 +196,8 @@ metadata:
       manager: vpa-recommender
       operation: Update
       subresource: status
-      time: '2023-11-24T19:00:51Z'
-  name: image-background-processor-hpa-cy3e
+      time: '2023-11-24T19:45:45Z'
+  name: image-background-processor-hpa-cgcm
   namespace: default
 spec:
   maxReplicas: 5
@@ -211,7 +247,7 @@ metadata:
           'f:type': {}
       manager: GoogleCloudConsole
       operation: Update
-      time: '2023-11-24T18:58:53Z'
+      time: '2023-11-24T19:43:21Z'
     - apiVersion: v1
       fieldsType: FieldsV1
       fieldsV1:
@@ -225,24 +261,24 @@ metadata:
       manager: cloud-controller-manager
       operation: Update
       subresource: status
-      time: '2023-11-24T18:59:30Z'
+      time: '2023-11-24T19:44:00Z'
   name: image-background-processor-service
   namespace: default
 spec:
   allocateLoadBalancerNodePorts: true
-  clusterIP: 10.8.12.28
+  clusterIP: 10.8.14.154
   clusterIPs:
-    - 10.8.12.28
+    - 10.8.14.154
   externalTrafficPolicy: Cluster
   internalTrafficPolicy: Cluster
   ipFamilies:
     - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-    - nodePort: 32060
+    - nodePort: 30577
       port: 80
       protocol: TCP
-      targetPort: 8082
+      targetPort: 5000
   selector:
     app: image-background-processor
   sessionAffinity: None
