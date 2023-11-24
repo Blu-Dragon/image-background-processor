@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: image-background-processor
-          image: gcr.io/arctic-operand-405810-image-background-processor:v1.0
+          image: gcr.io/arctic-operand-405810/image-background-processor:v1.0
           ports:
             - containerPort: 8082
