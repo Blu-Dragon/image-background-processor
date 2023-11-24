@@ -37,3 +37,5 @@ Cloud Build Setup
 2. Install `gcloud`: https://cloud.google.com/sdk/docs/install-sdk
 3. Connect to REPO: https://cloud.google.com/build/docs/automating-builds/github/connect-repo-github?generation=2nd-gen
 4. Build REPO: https://cloud.google.com/build/docs/automating-builds/github/build-repos-from-github?generation=2nd-gen
+5. Build triggers: https://cloud.google.com/build/docs/automating-builds/create-manage-triggers
+6. Automate deployment: https://cloud.google.com/kubernetes-engine/docs/how-to/automated-deployment
