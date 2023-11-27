@@ -8,6 +8,9 @@ from flask import Flask, render_template, request, flash, redirect, url_for, mak
 # Application imports
 from .api_connections import remove_img_bg
 from .config import *
+from .db_connections import List
+
+List = List()
 
 # Logging: When required
 # try:
@@ -44,8 +47,13 @@ def create_app():
             return resp
         # Use cookies to fetch user data
         id = request.cookies.get('id')
-        print(id)
-        return render_template('index.html')
+
+        # Testing
+        data = list(List.find_todo())
+        priority = [d['date'] for d in data]
+        priority.sort()
+
+        return render_template('index.html', data=data,priority=priority)
 
     # Create
     @app.post('/')
