@@ -1,16 +1,34 @@
 # In-bulit lib imports
 import base64
+from datetime import datetime
 from bson import ObjectId
+from bson.json_util import dumps, loads
 
 # Flask imports
-from flask import Flask, render_template, request, flash, redirect, url_for, make_response
+from flask import (
+    Flask,
+    render_template,
+    request,
+    flash,
+    redirect,
+    url_for,
+    make_response,
+)
 
 # Application imports
 from .api_connections import remove_img_bg
 from .config import *
-from .db_connections import List
 
-List = List()
+# Creating Flask instance
+app = Flask(__name__)
+
+# Secret key is needed for Flashing
+app.secret_key = APP_SECRET_KEY
+
+# Application imports
+from .db_connections import DataBase
+
+DataBase = DataBase()
 
 # Logging: When required
 # try:
@@ -24,88 +42,97 @@ List = List()
 #     print(f"Failed to initialize logging: {e}")
 
 
-def create_app():
-    # Creating Flask instance
-    app = Flask(__name__)
-    # Secret key is needed for Flashing
-    app.secret_key = APP_SECRET_KEY
+# Connection health check
+@app.get("/health")
+def health():
+    return {"status": "Healthy"}
 
-    # Connection health check
-    @app.get('/health')
-    def health():
-        return {"status": "Healthy"}
 
-    # Read
-    @app.get('/')
-    def index_page():
-        # Set cookies if None
-        if request.cookies.get('id') is None:
-            resp = make_response(render_template('index.html'))
-            obj_id = str(ObjectId())
-            print(obj_id)
-            resp.set_cookie('id', obj_id)
-            return resp
-        # Use cookies to fetch user data
-        id = request.cookies.get('id')
+# Read
+@app.get("/")
+def index_page():
+    # Set cookies if None
+    if request.cookies.get("user_id") is None:
+        resp = make_response(render_template("index.html"))
+        user_id = str(ObjectId())
+        resp.set_cookie("user_id", user_id)
+        return resp
 
-        # Testing
-        data = list(List.find_todo())
-        priority = [d['date'] for d in data]
-        priority.sort()
+    # Check if user data exists
+    user_id = request.cookies.get("user_id")
 
-        return render_template('index.html', data=data,priority=priority)
+    # Fetch user data
+    fetched_data = DataBase.read_data({'user_id': user_id})
+    # Convert curser object to string
+    json_string = dumps(fetched_data)
+    # Convert the JSON string to a Python object
+    data = loads(json_string)
 
-    # Create
-    @app.post('/')
-    def index_form():
-        try:
-            # Fetching form contents
-            name = request.form['name']
-            image = request.files['image'].read()
+    return render_template("index.html", data=data)
 
-            # Reading cookies; user id
-            id = request.cookies.get('id')
-            # Store ObjectId as NoSQL id in db
-            # ObjectId(id)
 
-            # Converting image to base64
-            img_base64 = base64.b64encode(image)
+# Create
+@app.post("/")
+def index_form():
+    try:
+        # Fetching form contents
+        name = request.form["name"]
+        image = request.files["image"].read()
 
-            # Function call to external api
-            if remove_img_bg(img_base64):
-                flash("Image generated successfully", MESSAGE_TYPE_SUCCESS)
-                return render_template('index.html')
+        # Reading cookies; user id
+        user_id = request.cookies.get("user_id")
 
-            flash("Failed to generate the image", MESSAGE_TYPE_DANGER)
-            return redirect(url_for('index_page'))
-        
-        except Exception as e:
-            print(f"Error: {e}")
-            flash("Something went wrong", MESSAGE_TYPE_DANGER)
-            return redirect(url_for('index_page'))
+        # Check user records count
+        count = DataBase.records_count({'user_id': user_id})
 
-    # Update
-    @app.put('/update')
-    def update_data():
-        pass
+        # Setting max user limit
+        if count >= USER_LIMIT:
+            flash("Max limit reached. Please remove a record.", MESSAGE_TYPE_DANGER)
+            return redirect(url_for("index_page"))
 
-    # Delete
-    @app.delete('/remove')
-    def remove_data():
-        pass
+        # Converting image to base64
+        img_base64 = base64.b64encode(image)
 
-    # Testing api_connections integration
-    # @app.route("/test-bg-remover")
-    # def test_bg_remover():
-    #     try:
-    #         with open("test/jarvis.jpg", "rb") as img_file: 
-    #             img_data = img_file.read()
-    #             img_base64 = base64.b64encode(img_data)
-            
-    #         remove_img_bg(img_base64)
-    #         return {"status": "Success"}
+        # Function call to external api
+        processed_image = remove_img_bg(img_base64)
 
-    #     except Exception as e:
-    #         return {"error": f"{e}"}
+        if processed_image:
 
-    return app
+            data = {
+                "user_id": user_id,
+                "image_name": name,
+                "image_base64": processed_image,
+                "created_on": str(datetime.today().replace(microsecond=0))
+            }
+
+            DataBase.create_data(data)
+
+            flash("Image generated successfully", MESSAGE_TYPE_SUCCESS)
+            return redirect(url_for("index_page"))
+
+        flash("Failed to generate the image", MESSAGE_TYPE_DANGER)
+        return redirect(url_for("index_page"))
+
+    except Exception as e:
+        print(f"Error: {e}")
+        flash("Something went wrong", MESSAGE_TYPE_DANGER)
+        return redirect(url_for("index_page"))
+
+
+# Update
+@app.put("/update")
+def update_data():
+    # Use cookies to fetch user data
+    id = request.cookies.get("user_id")
+    pass
+
+
+# Delete
+@app.delete("/remove")
+def remove_data():
+    pass
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

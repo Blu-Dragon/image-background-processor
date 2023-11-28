@@ -50,27 +50,30 @@ Background Remover Form
     </div>
 
     <!-- Test -->
-    <div class="jumbotron" style="margin-bottom: 100px ;">
+    <div class="jumbotron pt-5" style="margin-bottom: 100px ;">
         <div class="container">
           {% if data %}
-          <h1>Your List</h1>
           <hr>
+          <h1>Processed Images</h1>
           <table class="table" style="text-align: center;">
             <thead class="thead-dark">
               <tr>
-                <th scope="col">Task</th>
-                <th scope="col">Priority</th>
-                <th scope="col">Completed</th>
+                <th scope="col">Image Name</th>
+                <th scope="col">Processed Image</th>
+                <th scope="col">Created On</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             {% endif %}
-            {% for p in priority %}
+            
             <tbody>
               {% for d in data %}
-              {% if p == d['date'] %}
+              
               <tr>
-                <td>{{ d['task'] }}</td>
-                <td>{{ d['date'] }}</td>
+                <td>{{d['image_name']}}</td>
+                <td><img src="data:image/jpeg;base64,{{d['image_base64'] | safe}}" class="card-img-top" alt="{{d['image_name']}}"
+                  style="width: 150px; height: 150px;"></td>
+                <td>{{d['created_on']}}</td>
                 <td>
                   <form action="./" method="POST" class="ml-auto mr-auto m-2" style="text-align: center;">
                     <button type="submit" class="btn btn-danger btn-sm" name="rm-list" value="{{d['_id']}}">
@@ -79,12 +82,11 @@ Background Remover Form
                   </form>
                 </td>
               </tr>
-              {% endif %}
+              
               {% endfor %}
             </tbody>
-            {% endfor %}
+            
           </table>
-          <hr>
         </div>
       </div>
     <!-- Test End -->

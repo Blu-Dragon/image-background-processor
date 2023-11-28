@@ -50,12 +50,14 @@ def remove_img_bg(img_base64):
     if image_output_base64 is None:
         return False
 
-    # Converting base64 back to an image
-    image_output_base64 = image_output_base64.split(',', 1)[-1]
-    image_data = base64.b64decode(image_output_base64)
-    image = Image.open(BytesIO(image_data))
+    return image_output_base64
+    
+    # # Converting base64 back to an image
+    # image_output_base64 = image_output_base64.split(',', 1)[-1]
+    # image_data = base64.b64decode(image_output_base64)
+    # image = Image.open(BytesIO(image_data))
 
-    # Saving the image
-    image.save("./test/output_image.png")
+    # # Saving the image
+    # image.save("./test/output_image.png")
 
-    return True
+    # return True

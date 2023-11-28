@@ -1,26 +1,26 @@
-# Used to establish db connections for CRUD operations
-# app(__init__.py) will import stuff from here
-
 import os
-from flask import Flask
+from app import app
 from flask_pymongo import PyMongo
 
-from bson.objectid import ObjectId
+mongo = PyMongo(app, uri=os.environ.get("MONGO_URI"))
 
-todo = Flask(__name__)
+# Initializing db collection => "img_converter"
+db = mongo.db.img_converter
 
-mongo = PyMongo(todo,uri=os.environ.get('MONGO_URI'))
+class DataBase:
+    def create_data(self, data):
+        db.insert_one(data)
 
-class List:
+    def read_data(self, query):
+        fetched_data = db.find(query)
+        return fetched_data
 
-    def add_todo(self,new_list):
-        mongo.db.todo.insert_one({'task':new_list['task'],'date':new_list['date']})
-        # print('Todo Added : ',add)
+    def update_processed_data(self, user_id, query):
+        updated_data = db.update_one({"user_id": user_id}, {"$set": query})
+        return updated_data
 
-    def remove_todo(self,_id):
-        mongo.db.todo.delete_one({'_id':ObjectId(_id)})
-        # print('ID REMOVE : ',_id)
+    def delete_processed_data(self, _id):
+        db.delete_one({"_id": ObjectId(_id)})
 
-    def find_todo(self):
-        data = mongo.db.todo.find({})
-        return data
+    def records_count(self, query):
+        return db.count_documents(query)
