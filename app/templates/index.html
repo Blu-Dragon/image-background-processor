@@ -12,7 +12,7 @@ Background Remover
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="text-center">Background Remover</h1>
+                    <h1 class="text-center">Image Background Remover</h1>
                 </div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">
@@ -67,6 +67,7 @@ Background Remover
             <thead class="thead-dark">
               <tr>
                 <th scope="col">Image Name</th>
+                <th scope="col">Original Image</th>
                 <th scope="col">Processed Image</th>
                 <th scope="col">Created On</th>
                 <th scope="col">Action</th>
@@ -79,6 +80,8 @@ Background Remover
               
               <tr>
                 <td>{{d['image_name']}}</td>
+                <td><img src="data:image/jpeg;base64,{{d['original_image_base64'] | safe}}" class="card-img-top" alt="original-{{d['image_name']}}"
+                  style="width: 150px; height: 150px;"></td>
                 <td><img src="data:image/jpeg;base64,{{d['processed_image_base64'] | safe}}" class="card-img-top" alt="{{d['image_name']}}"
                   style="width: 150px; height: 150px;"></td>
                 <td>{{d['created_on']}}</td>

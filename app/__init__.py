@@ -102,7 +102,7 @@ def index_form():
             data = {
                 "user_id": user_id,
                 "image_name": name,
-                "original_image_base64": img_base64,
+                "original_image_base64": str(img_base64, "utf-8"),
                 "processed_image_base64": processed_image,
                 "created_on": str(datetime.today().replace(microsecond=0))
             }
