@@ -79,7 +79,7 @@ Background Remover
               
               <tr>
                 <td>{{d['image_name']}}</td>
-                <td><img src="data:image/jpeg;base64,{{d['image_base64'] | safe}}" class="card-img-top" alt="{{d['image_name']}}"
+                <td><img src="data:image/jpeg;base64,{{d['processed_image_base64'] | safe}}" class="card-img-top" alt="{{d['image_name']}}"
                   style="width: 150px; height: 150px;"></td>
                 <td>{{d['created_on']}}</td>
                 <td>
