@@ -1,5 +1,6 @@
 import os
 from app import app
+from bson import ObjectId
 from flask_pymongo import PyMongo
 
 mongo = PyMongo(app, uri=os.environ.get("MONGO_URI"))
@@ -15,8 +16,8 @@ class DataBase:
         fetched_data = db.find(query)
         return fetched_data
 
-    def update_processed_data(self, user_id, query):
-        updated_data = db.update_one({"user_id": user_id}, {"$set": query})
+    def update_processed_data(self, _id, query):
+        updated_data = db.update_one({"_id": ObjectId(_id)}, {"$set": query})
         return updated_data
 
     def delete_processed_data(self, _id):

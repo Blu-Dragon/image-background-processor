@@ -13,6 +13,7 @@ from flask import (
     redirect,
     url_for,
     make_response,
+    jsonify
 )
 
 # Application imports
@@ -120,19 +121,29 @@ def index_form():
 
 
 # Update
-@app.put("/update")
-def update_data():
-    # Use cookies to fetch user data
-    id = request.cookies.get("user_id")
-    pass
+@app.put("/update/<string:record_id>")
+def update_data(record_id):
+    try:
+        record_id = request.json.get("record_id")
+        record_name = request.json.get("record_name")
 
+        # Editing image name
+        DataBase.update_processed_data(record_id, {"image_name": record_name})
+        return jsonify({"message":"success"})
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"message":"error while editing"})
 
 # Delete
-@app.delete("/remove")
-def remove_data():
-    pass
-
-
+@app.delete('/remove/<string:record_id>')
+def remove_data(record_id):
+    try:
+        # Deleting entry from db
+        DataBase.delete_processed_data(record_id)
+        return jsonify({"message":"success"})
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"message":"error while deleting"})
 
 if __name__ == "__main__":
     app.run(debug=True)
