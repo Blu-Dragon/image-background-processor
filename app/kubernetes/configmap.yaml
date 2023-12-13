@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  APP_SECRET_KEY: your_data
+  X_RAPID_API_KEY: your_data
+  X_RAPID_API_HOST: your_data
+  MONGO_URI: your_data
