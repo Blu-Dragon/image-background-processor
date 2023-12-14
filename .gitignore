@@ -162,5 +162,5 @@ cython_debug/
 # Custom
 /test
 run
-*.png
-*.jpg
+# *.png
+# *.jpg

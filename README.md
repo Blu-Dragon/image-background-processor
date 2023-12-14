@@ -65,10 +65,10 @@ Create a file named `.env` ; copy contents from `.env.example` and replace them 
 # Application Overview
 
 ### Home Page
-![alt img](./assets/get_home.png)
+![alt img](assets/get_home.png)
 
 ### Add Data
-![alt img](./assets/upload_image.png)
+![alt img](assets/upload_image.png)
 
 ![alt img](assets/upload_success.png)
 
