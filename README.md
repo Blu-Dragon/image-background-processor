@@ -31,8 +31,7 @@ Create a file named `.env` ; copy contents from `.env.example` and replace them 
 
 ---
 
-##
-Cloud Build Setup
+## Cloud Build Setup
 1. Enable Google Build API: https://cloud.google.com/build/docs/api/reference/rest
 2. Install `gcloud`: https://cloud.google.com/sdk/docs/install-sdk
 3. Connect to REPO: https://cloud.google.com/build/docs/automating-builds/github/connect-repo-github?generation=2nd-gen
@@ -98,6 +97,7 @@ This endpoint serves an index page. It performs the following actions:
         "email": "john@example.com"
     }
     ```
+---
 
 ## Create Data
 
@@ -136,6 +136,8 @@ This endpoint allows users to submit form data, including an image. It performs 
     - If there's an issue with image processing: "Failed to generate the image" (danger message).
     - If the user has reached the maximum limit: "Max limit reached. Please remove a record." (danger message).
     - If an unexpected error occurs: "Something went wrong" (danger message).
+
+---
 
 ## Update Data
 
