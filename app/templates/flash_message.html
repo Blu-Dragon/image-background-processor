@@ -1,0 +1,33 @@
+{%macro flash_message()%}
+
+<div class="p-0">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+
+    {% for category, message in messages %}
+    {% if category=='message' %}
+        <div class="alert alert-primary alert-dismissible fade show mb-0" id="flash-alert" role="alert">
+            {{message}}
+            <button aria-label="Close" class="btn-sm btn-close" data-bs-dismiss="alert" type="button"></button>
+        </div>
+    {% else %}
+        <div class="alert alert-{{category}} alert-dismissible fade show mb-0" id="flash-alert" role="alert">
+            {{message}}
+            <button aria-label="Close" class="btn-sm btn-close" data-bs-dismiss="alert" type="button"></button>
+        </div>
+    {% endif %}
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
+</div>
+
+<script>
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 10000);
+</script>
+
+{% endmacro %}

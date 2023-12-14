@@ -1,0 +1,252 @@
+{% from "flash_message.html" import flash_message with context %}
+{% extends "base_template.html"%}
+
+{% block title %}
+Background Remover
+{% endblock %}
+
+
+{% block content %}
+<div class="container pt-4 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Image Background Remover</h1>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="form-group col-md-8 p-2 mb-2">
+                            <label for="name">Image Name :</label>
+                            <input type="text" class="form-control" id="name" name="name" required maxlength="50">
+                        </div>
+                        <div class="form-group col-md-8 p-2 mb-2">
+                            <label for="image">Image : </label>
+                            <input type="file" class="form-control-file" id="image" name="image" accept="image/*"
+                                required>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                    <hr>
+                    <h5 class="card-title"></h5>
+                    <img class="card-img-top" id="preview" src="#" alt="Preview"
+                        style="display: none; width: 200px; height: 200px;">
+                    <div class="card-text">
+
+                        <div class="card-text">
+                            <!-- begin::flash message::card-body -->
+                            <div style="text-align:center" class="card-body px-0">
+                                <!-- Flash message shown here -->
+                                {{flash_message()}}
+                            </div>
+                            <!-- end::flash message::card-body -->
+
+                            {% if request.args %}
+                                <div class="alert alert-{{request.args.get('type')}} alert-dismissible fade show mb-0" id="flash-alert" role="alert">
+                                  {{request.args.get('message')}}
+                                  <button aria-label="Close" class="btn-sm btn-close" data-bs-dismiss="alert" type="button"></button>
+                              </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test -->
+    <div class="jumbotron pt-5" style="margin-bottom: 100px ;">
+        <div class="container">
+          {% if data %}
+          <hr>
+          <h1>Processed Images</h1>
+          <table class="table" style="text-align: center;">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Image Name</th>
+                <th scope="col">Original Image</th>
+                <th scope="col">Processed Image</th>
+                <th scope="col">Created On</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            {% endif %}
+            
+            <tbody>
+              {% for d in data %}
+              
+              <tr>
+                <td>{{d['image_name']}}</td>
+                <td><img src="data:image/jpeg;base64,{{d['original_image_base64'] | safe}}" class="card-img-top" alt="original-{{d['image_name']}}"
+                  style="width: 150px; height: 150px;"></td>
+                <td><img src="data:image/jpeg;base64,{{d['processed_image_base64'] | safe}}" class="card-img-top" alt="{{d['image_name']}}"
+                  style="width: 150px; height: 150px;"></td>
+                <td>{{d['created_on']}}</td>
+                <td>
+                  <form id="" class="ml-auto mr-auto m-2 delete-form" style="text-align: center;">
+                    <!-- Edit Button -->
+                    <input type="submit" class="btn btn-success btn-sm edit-button" value="Edit"
+                      data-record-id="{{ d['_id'] }}" data-record-name="{{ d['image_name'] }}">
+                    <!-- Delete Button -->
+                    <input type="submit" class="btn btn-danger btn-sm" value="Delete" data-record-id="{{d['_id']}}">
+                  </form>
+                </td>
+              </tr>
+              
+              {% endfor %}
+            </tbody>
+          </table>
+
+
+          <!-- Modal -->
+          <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editModalLabel">Edit</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="editForm">
+                    <input type="hidden" name="recordId" value="">
+                    <div class="form-group">
+                        <label for="recordNameInput">Image Name</label>
+                        <input type="text" class="form-control" id="recordNameInput" name="recordName" autocomplete="off">
+                        <input type="text" class="form-control" id="recordIdInput" name="recordId" hidden>
+                    </div>
+                    <div><span class="text-muted" style="font-size: small;">Note: You can only change image name.</span></div>
+                    <br>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+
+                  </form>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        
+
+        </div>
+      </div>
+    <!-- Test End -->
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        // Read the uploaded file and display it in the preview
+        document.getElementById('image').addEventListener('change', function () {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('preview').style.display = 'block';
+                document.querySelector('.card-title').textContent = 'Image Preview';
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+    </script>
+
+    <!-- Delete Form -->
+    <script>
+        document.querySelectorAll('.delete-form').forEach(element => {
+          element.addEventListener('submit', function (event) {
+
+          event.preventDefault(); // Prevent default form submission
+
+          // Get the value of the submit button
+          const record_id = event.submitter.getAttribute('data-record-id')
+
+          // Make the DELETE request to your Flask API
+          fetch(`/remove/${record_id}`, {
+              method: 'DELETE',
+              // Additional headers or data if needed
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          })
+          .then(response => {
+              if (response.ok) {
+                  // Handle success
+                  console.log(`Item ${record_id} deleted successfully`);
+                  window.location.href = '/?message=Deleted+successfully&type=success';
+              } else {
+                  // Handle error
+                  window.location.href = '/?message=Error+occurred+while+deleting&type=danger';
+                  console.error('Error deleting item');
+              }
+          })
+          .catch(error => {
+              // Handle network or other errors
+              console.error('Network error:', error);
+          });
+      });
+    });
+    </script>
+
+    <!-- Modal -->
+    <script>
+      document.querySelectorAll('.edit-button').forEach(button => {
+          button.addEventListener('click', function (event) {
+              event.preventDefault();
+              const recordId = this.getAttribute('data-record-id');
+              const recordName = this.getAttribute('data-record-name');
+
+              console.log(recordId, recordName)
+              // Set the modal form action dynamically
+              document.getElementById('editForm').action = `/update/${recordId}`;
+
+              // Set any other modal form fields (if needed)
+              document.getElementById('recordIdInput').value = recordId;
+              document.getElementById('recordNameInput').value = recordName;
+
+              // Show the modal
+              $('#editModal').modal('show');
+          });
+      });
+    </script>
+
+
+    <!-- Edit Form -->
+    <script>
+      document.getElementById('editForm').addEventListener('submit', function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          // Get the value of the submit button
+          const record_id = document.getElementById('recordIdInput').value
+          const record_name = document.getElementById('recordNameInput').value
+
+          // Make the PUT request to your Flask API
+          fetch(`/update/${record_id}`, {
+              method: 'PUT',
+              // Additional headers or data if needed
+              body: JSON.stringify({ "record_id": `${record_id}`, "record_name": `${record_name}` }), // Send the value in the request body
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          })
+          .then(response => {
+              if (response.ok) {
+                  // Handle success
+                  console.log(`Item ${record_id} deleted successfully`);
+                  window.location.href = '/?message=Image+name+edited+successfully&type=success';
+              } else {
+                  // Handle error
+                  window.location.href = '/?message=Error+occurred+while+editing&type=danger';
+                  console.error('Error deleting item');
+              }
+          })
+          .catch(error => {
+              // Handle network or other errors
+              console.error('Network error:', error);
+          });
+      });
+  
+    </script>
+
+
+    {% endblock %}
