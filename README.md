@@ -31,6 +31,52 @@ Create a file named `.env` ; copy contents from `.env.example` and replace them 
 
 ---
 
+# Project Directory Structure
+.
+├── app
+│   ├── api_connections.py
+│   ├── config.py
+│   ├── db_connections.py
+│   ├── __init__.py
+│   ├── kubernetes
+│   │   ├── configmap.yaml
+│   │   ├── deployment.yaml
+│   │   └── service.yaml
+│   └── templates
+│       ├── base_template.html
+│       ├── flash_message.html
+│       └── index.html
+├── assets
+│   ├── delete_data.png
+│   ├── edit_data.png
+│   ├── get_home.png
+│   ├── upload_image.png
+│   └── upload_success.png
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── requirements.txt
+└── venv
+
+---
+# Application Overview
+
+### Home Page
+![alt img](assets/get_home.png)
+
+### Add Data
+![alt img](assets/upload_image.png)
+
+![alt img](assets/upload_success.png)
+
+### Edit Data
+![alt img](assets/edit_data.png)
+
+### Delete Data
+![alt img](assets/delete_data.png)
+
+---
+
 # API Documentation
 
 ## Connection Health Check
