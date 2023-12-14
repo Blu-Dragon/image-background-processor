@@ -1,10 +1,30 @@
-# image-background-processor
+# Image Background Remover
 
 A REST-API application built with Flask Framework
 
 ---
 
-# Table of Contents (TODO)
+# Table of Contents
+
+- [About](#about)
+- [Setup](#setup)
+- [Project Directory Structure](#project-directory-structure)
+- [System Overview](#system-overview)
+     - [System Architecture](#system-architecture)
+- [Application Overview](#application-overview)
+- [Application Architecture](#application-architecture)
+	 - [About Flask](#about-flask)
+	 - [REST API](#rest-api)
+	 - [CRUD Operations](#crud-operations)
+     - [API Documentation](#api-documentation)
+	 - [External API](#external-api)
+- [Cloud Build Setup](#cloud-build-setup)
+    - [Cloud Infrastructure](#cloud-infrastructure)
+        - [MongoDB Atlas](#mongodb-atlas)
+        - [Image Database Schema](#image-database-schema)
+        - [Google Cloud](#google-cloud)
+        - [Kubernetes](#kubernetes)
+	    - [Docker](#docker)
 
 ---
 
@@ -15,6 +35,14 @@ An Image Background Remover is an application designed to automatically remove a
 Image background removal is useful in various scenarios, including e-commerce product photography, graphic design, marketing materials, and creating visually appealing social media content.​
 
 ---
+# Setup
+
+### Pre-requisites
+1. https://rapidapi.com/objectcut.api/api/background-removal/
+2. https://www.python.org/downloads/release/python-380/
+3. https://rapidapi.com/objectcut.api/api/background-removal/details
+4. https://cloud.google.com/?hl=en
+5. https://www.mongodb.com/atlas/database
 
 ### Virtual Environment Setup
 
@@ -79,9 +107,9 @@ Create a file named `.env` ; copy contents from `.env.example` and replace them 
 
 The user interface, acting as the front end, seamlessly operates as a website, while the backend functions as a Restful service interface, supporting CRUD operations like querying text content data. This backend is deployed on Google Cloud, utilizing Kubernetes for scalable performance, and it is encapsulated within a Dockerized image. The application integrates with a background remover API. Additionally, MongoDB Atlas cloud serves as the database, storing information related to image content in the application.
 
-## System Architecture (TODO)
+## System Architecture
 
-
+![alt img](assets/cloud.png)
 
 ---
 
@@ -114,22 +142,22 @@ User can delete past entries, if he has reached his entries limit. (i.e `USER_LI
 
 ---
 
-# Application Architecture (TODO)
+# Application Architecture
 
 ---
 
-# About Flask
+## About Flask
 
 Flask is a lightweight and web framework written in Python. It is designed to be simple, easy to use, and flexible, making it a popular choice for building web applications and APIs. Flask provides the essential tools and features needed for web development without imposing a rigid structure or set of dependencies, allowing developers to choose their preferred components and libraries.​
 
 ---
-# REST API
+## REST API
 
 A REST API (Representational State Transfer Application Programming Interface) is an interface that follows the principles of REST, which is an architectural style for designing networked applications. REST APIs are a set of rules and conventions for building and interacting with web services. These APIs enable communication and data exchange between different software systems over the internet.​
 
 ---
 
-# CURD Operations
+## CURD Operations
 
 CRUD, an acronym for "Create, Read, Update, and Delete," encapsulates the fundamental operations in databases. These operations are commonly mirrored in HTTP services through REST or REST-like APIs.
 
