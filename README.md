@@ -260,7 +260,7 @@ This schema represents the structure of an image data document stored in the Mon
 
 ---
 
-## Cloud Build Setup
+# Cloud Build Setup
 
 ## Cloud Infrastructure
 
