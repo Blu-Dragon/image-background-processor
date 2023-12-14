@@ -1,14 +1,6 @@
 """
-This file will make calls to external API => Needs modifications
+This file will make calls to external API
 External API URL: https://rapidapi.com/objectcut.api/api/background-removal/
-
----------------Discussed during the meeting---------------
-1. Give user options to choose img output and input according to the api
-2.  CRUD Operations
-    Create: User img from our api will get converted to base64 from form and stored in db
-    Read: Read from bd
-    Update: External api call -> response output img will get stored in db
-    Delete: Limit entries to 20 images; Use cookies (flask session) to store user id and limit entries. User can rm entries to add new ones.
 """
 
 import requests
@@ -23,7 +15,6 @@ url = "https://background-removal.p.rapidapi.com/remove"
 
 def remove_img_bg(img_base64):
     payload = {
-        # "image_url": "https://objectcut.com/assets/img/raven.jpg",
         "image_base64": img_base64,
         "output_format": "base64"
     }
@@ -51,13 +42,3 @@ def remove_img_bg(img_base64):
         return False
 
     return image_output_base64
-    
-    # # Converting base64 back to an image
-    # image_output_base64 = image_output_base64.split(',', 1)[-1]
-    # image_data = base64.b64decode(image_output_base64)
-    # image = Image.open(BytesIO(image_data))
-
-    # # Saving the image
-    # image.save("./test/output_image.png")
-
-    # return True

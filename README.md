@@ -4,6 +4,18 @@ A REST-API application built with Flask Framework
 
 ---
 
+# Table of Contents (TODO)
+
+---
+
+# About
+
+An Image Background Remover is an application designed to automatically remove an image background. The background removal process involves isolating the main subject or object in an image from its surrounding background, making it easy to place the subject in a different context or use it on a transparent background.​
+
+Image background removal is useful in various scenarios, including e-commerce product photography, graphic design, marketing materials, and creating visually appealing social media content.​
+
+---
+
 ### Virtual Environment Setup
 
 | **Windows Commands** | **Linux Commands** |
@@ -62,22 +74,74 @@ Create a file named `.env` ; copy contents from `.env.example` and replace them 
 ```
 
 ---
+
+# System Overview
+
+The user interface, acting as the front end, seamlessly operates as a website, while the backend functions as a Restful service interface, supporting CRUD operations like querying text content data. This backend is deployed on Google Cloud, utilizing Kubernetes for scalable performance, and it is encapsulated within a Dockerized image. The application integrates with a background remover API. Additionally, MongoDB Atlas cloud serves as the database, storing information related to image content in the application.
+
+## System Architecture (TODO)
+
+
+
+---
+
 # Application Overview
 
 ### Home Page
+This will be the initial application landing page, where user will input the image or see past processed entries. User id is created and tracked using browser cookies.
+Each user session is allowed to process a limited number of entries which is set in `config.py` as `USER_LIMIT`.
+
 ![alt img](assets/get_home.png)
 
 ### Add Data
+Here user can upload an image which can be processed by background removal api at the backend.
+
+- Initial Upload
 ![alt img](assets/upload_image.png)
 
+- Processed Successfully
 ![alt img](assets/upload_success.png)
 
 ### Edit Data
+Here the user can edit the image name, which was stored in the database.
+
 ![alt img](assets/edit_data.png)
 
 ### Delete Data
+User can delete past entries, if he has reached his entries limit. (i.e `USER_LIMIT`)
+
 ![alt img](assets/delete_data.png)
 
+---
+
+# Application Architecture (TODO)
+
+---
+
+# About Flask
+
+Flask is a lightweight and web framework written in Python. It is designed to be simple, easy to use, and flexible, making it a popular choice for building web applications and APIs. Flask provides the essential tools and features needed for web development without imposing a rigid structure or set of dependencies, allowing developers to choose their preferred components and libraries.​
+
+---
+# REST API
+
+A REST API (Representational State Transfer Application Programming Interface) is an interface that follows the principles of REST, which is an architectural style for designing networked applications. REST APIs are a set of rules and conventions for building and interacting with web services. These APIs enable communication and data exchange between different software systems over the internet.​
+
+---
+
+# CURD Operations
+
+CRUD, an acronym for "Create, Read, Update, and Delete," encapsulates the fundamental operations in databases. These operations are commonly mirrored in HTTP services through REST or REST-like APIs.
+
+The primary HTTP methods—GET, PUT, POST, and DELETE—align with CRUD operations as follows:
+
+- GET: Retrieves the representation of a resource at a designated URI. This operation should not have any side effects on the server.
+
+- PUT: Updates a resource at a specified URI. Additionally, PUT can be employed to create a new resource at a designated URI, provided the server permits clients to specify new URIs. However, in this tutorial, the API will not support creation through PUT.
+
+- POST: Initiates the creation of a new resource. The server allocates the URI for the new object and includes this URI as part of the response message.
+
+- DELETE: Removes a resource at a specified URI.
 ---
 
 # API Documentation
@@ -245,7 +309,42 @@ This endpoint allows users to remove an existing record identified by its `recor
 
 ---
 
-# Image Database Schema
+# External API
+
+We are using an free external api provided by RapidAPI to execute the image background removal task.
+[Background Removal API Link](https://rapidapi.com/objectcut.api/api/background-removal/)
+
+This is the RESTful API for our AI Solution for Background or Foreground Removal. This solution allows clients to remove background or foreground from images without need to resize it, keeping or removing then just the main object visible.
+[Background Removal API Details](https://rapidapi.com/objectcut.api/api/background-removal/details)
+
+---
+
+# Cloud Build Setup
+
+## Cloud Infrastructure
+
+The infrastructure for cloud computing comprises the necessary hardware and software components to facilitate cloud computing. This encompasses computing power, networking, and storage, alongside an interface for users to access their virtualized resources. These virtual resources emulate a physical infrastructure, including elements such as servers, network switches, memory, and storage clusters.
+
+**Rationale for Cloud Computing Infrastructure**
+
+Cloud infrastructure delivers equivalent capabilities to physical infrastructure but with added advantages, such as reduced ownership costs, increased flexibility, and scalability. It is available for private, public, and hybrid cloud systems. Cloud infrastructure can also be rented from a cloud provider through Infrastructure as a Service (IaaS), allowing integrated hardware and software with a unified management platform for multiple clouds.
+
+## MongoDB Atlas
+
+**MongoDB Atlas** is a **multi-cloud database service** which simplifies the process of deploying and managing databases while providing the flexibility needed to build robust and high-performing global applications across various cloud providers.
+
+1. **Deployment Flexibility**: MongoDB Atlas allows you to choose from different deployment types:
+    - **Free Cluster**: Experiment with a free cluster.
+    - **Serverless Instance**: Launch a serverless instance.
+    - **Dedicated Cluster Configuration**: Define a dedicated cluster configuration tailored to your application's needs.
+
+2. **Cloud Providers**: Deploy your database on-demand with MongoDB Atlas on cloud providers such as **AWS**, **Azure**, and **Google Cloud**. 
+
+3. **Customization**: Customize your database deployment by enabling multi-cloud and multi-region data distribution. This approach expands global coverage, enhances fault tolerance, and ensures compliance with data regulations.
+
+We have used the MongoDB Atlas cloud database to store and retrive our data using `Flask-PyMongo`.
+
+### Image Database Schema
 
 This schema represents the structure of an image data document stored in the MongoDB database.
 
@@ -259,16 +358,6 @@ This schema represents the structure of an image data document stored in the Mon
 | `created_on`             | Timestamp indicating when the record was created (formatted as "YYYY-MM-DD HH:MM:SS").              |
 
 ---
-
-# Cloud Build Setup
-
-## Cloud Infrastructure
-
-The infrastructure for cloud computing comprises the necessary hardware and software components to facilitate cloud computing. This encompasses computing power, networking, and storage, alongside an interface for users to access their virtualized resources. These virtual resources emulate a physical infrastructure, including elements such as servers, network switches, memory, and storage clusters.
-
-**Rationale for Cloud Computing Infrastructure**
-
-Cloud infrastructure delivers equivalent capabilities to physical infrastructure but with added advantages, such as reduced ownership costs, increased flexibility, and scalability. It is available for private, public, and hybrid cloud systems. Cloud infrastructure can also be rented from a cloud provider through Infrastructure as a Service (IaaS), allowing integrated hardware and software with a unified management platform for multiple clouds.
 
 ### Google Cloud
 
