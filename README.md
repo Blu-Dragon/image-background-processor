@@ -205,7 +205,7 @@ This endpoint allows users to remove an existing record identified by its `recor
 
 ---
 
-# Image Data Schema
+# Image Database Schema
 
 This schema represents the structure of an image data document stored in the MongoDB database.
 
